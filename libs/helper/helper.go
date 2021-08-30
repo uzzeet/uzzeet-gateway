@@ -115,6 +115,14 @@ func StringToInt(value string, def int64) int64 {
 	return r
 }
 
+func StringToFloat(value string, def float64) float64 {
+	r, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		r = def
+	}
+	return r
+}
+
 func IsInteger(v string) bool {
 	if v == "" {
 		return false
