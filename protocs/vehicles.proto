@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = ".;packets";
+
+package packets;
+
+import "google/protobuf/any.proto";
+
+message VehiclesRequest {
+    google.protobuf.Any Data = 1;
+}
+
+message UpdateVehiclesRequest {
+    string VehiclesID = 1;
+    google.protobuf.Any Data = 2;
+}
+
+message VehiclesRequestByID {
+    string VehiclesID = 1;
+}
+
+message OutputVehicles {
+    int32 Status = 1;
+    google.protobuf.Any Data = 2;
+}
+
+service Vehicles {
+    rpc CreateVehicle(VehiclesRequest) returns(OutputVehicles){}
+    rpc UpdateVehicle(UpdateVehiclesRequest) returns(OutputVehicles){}
+    rpc GetVehiclesById(VehiclesRequestByID) returns(OutputVehicles){}
+    rpc DeleteVehiclesById(VehiclesRequestByID) returns(OutputVehicles){}
+    rpc GetVehiclesList(VehiclesRequest) returns(OutputVehicles){}
+}

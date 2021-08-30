@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+option go_package = ".;packets";
+
+package packets;
+
+import "google/protobuf/any.proto";
+
+message DevicesRequest {
+    google.protobuf.Any Data = 1;
+}
+
+message UpdateDevicesRequest {
+    string DevicesID = 1;
+    google.protobuf.Any Data = 2;
+}
+
+message DevicesRequestByID {
+    string DevicesID = 1;
+}
+
+message OutputDevices {
+    int32 Status = 1;
+    google.protobuf.Any Data = 2;
+}
+
+message GpstypeRequest {
+    google.protobuf.Any Data = 1;
+}
+
+message UpdateGpstypeRequest {
+    int64 GpsID = 1;
+    google.protobuf.Any Data = 2;
+}
+
+message GpstypeRequestByID {
+    int64 GpsID = 1;
+}
+
+message OutputGpstype {
+    int32 Status = 1;
+    google.protobuf.Any Data = 2;
+}
+
+message HistoryRequest {
+    google.protobuf.Any Data = 1;
+}
+
+message UpdateHistoryRequest {
+    string HistoryID = 1;
+    google.protobuf.Any Data = 2;
+}
+
+message HistoryRequestByID {
+    string HistoryID = 1;
+}
+
+message OutputHistory {
+    int32 Status = 1;
+    google.protobuf.Any Data = 2;
+}
+
+service Devices {
+    rpc CreateDevice(DevicesRequest) returns(OutputDevices){}
+    rpc UpdateDevice(UpdateDevicesRequest) returns(OutputDevices){}
+    rpc GetDevicesById(DevicesRequestByID) returns(OutputDevices){}
+    rpc GetDevicesList(DevicesRequest) returns(OutputDevices){}
+    rpc DeleteDevicesByImei(DevicesRequestByID) returns(OutputDevices){}
+
+    rpc CreateGpstype(GpstypeRequest) returns(OutputGpstype){}
+    rpc UpdateGpstype(UpdateGpstypeRequest) returns(OutputGpstype){}
+    rpc GetGpstypeById(GpstypeRequestByID) returns(OutputGpstype){}
+    rpc GetGpstypeList(GpstypeRequest) returns(OutputGpstype){}
+    rpc DeleteGpstypeById(GpstypeRequestByID) returns(OutputGpstype){}
+
+    rpc CreateHistory(HistoryRequest) returns(OutputHistory){}
+    rpc UpdateHistory(UpdateHistoryRequest) returns(OutputHistory){}
+    rpc GetHistoryById(HistoryRequestByID) returns(OutputHistory){}
+    rpc GetHistoryList(HistoryRequest) returns(OutputHistory){}
+    rpc DeleteHistoryById(HistoryRequestByID) returns(OutputHistory){}
+}

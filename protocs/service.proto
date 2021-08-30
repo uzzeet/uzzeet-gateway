@@ -1,0 +1,56 @@
+// Build commands that must be run from the root of project folder.
+// Golang: protoc -I $GOPATH/src -I. --go_out=plugins=grpc:$GOPATH/src ./packets/*.proto
+
+syntax = "proto3";
+
+// import "google/protobuf/empty.proto";
+
+option go_package = ".;packets";
+
+package packets;
+
+// import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+
+service Service {
+    rpc Handshake(AckRequest) returns (Ack) {}
+    rpc Dispatch(Request) returns (Response) {}
+}
+
+service Cleva {
+    rpc Call(Request) returns (Response) {}
+}
+
+message Ack {
+    string Namespace = 1;
+    string Server = 2;
+    string Checksum = 3;
+    map<string, ProtectedRoutes> ProtectedRoutes = 4;
+}
+
+message AckRequest {
+    string From = 2;
+}
+
+message ProtectedRoute {
+    bool IsStrict = 1;
+    string Method = 3;
+    string Pattern = 2;
+    google.protobuf.Any Metas = 4;
+}
+
+message ProtectedRoutes {
+    repeated ProtectedRoute Routes = 1;
+}
+
+message Request {
+    string Path = 1;
+    string Method = 2;
+    bytes Body = 3;
+}
+
+message Response {
+    string Server = 1;
+    int32 Status = 2;
+    bytes Body = 3;
+}
