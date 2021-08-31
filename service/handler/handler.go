@@ -68,6 +68,15 @@ func (fwd chiForwarder) forward(w http.ResponseWriter, r *http.Request) {
 				log.Fatalln(err)
 			}
 
+			if resp.Header.Get("Content-Type") != models.ContentTypeValueJSON {
+				for k, v := range resp.Header {
+					w.Header().Set(k, v[0])
+				}
+				w.WriteHeader(resp.StatusCode)
+				w.Write(body)
+				return
+			}
+
 			fwd.responseFromHttp(composite.Key, w, body)
 			defer resp.Body.Close()
 
