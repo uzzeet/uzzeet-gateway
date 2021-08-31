@@ -44,6 +44,18 @@ const (
 	DBConnMaxIdle  = "DB_CONN_MAX_IDLE"
 	DBConnMaxOpen  = "DB_CONN_MAX_OPEN"
 
+	CKEngine       = "CK_ENGINE"
+	CKHost         = "CK_HOST"
+	CKPort         = "CK_PORT"
+	CKUser         = "CK_USER"
+	CKPwd          = "CK_PWD"
+	CKName         = "CK_NAME"
+	CKSSLMode      = "CK_SSL_MODE"
+	CKConnStr      = "CK_CONN_STR"
+	CKConnLifetime = "CK_CONN_LIFETIME"
+	CKConnMaxIdle  = "CK_CONN_MAX_IDLE"
+	CKConnMaxOpen  = "CK_CONN_MAX_OPEN"
+
 	BrokerAddr = "BROKER_ADDR"
 	BrokerPwd  = "BROKER_PWD"
 
