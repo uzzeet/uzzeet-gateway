@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"strings"
+	"time"
 
 	L "github.com/uzzeet/uzzeet-gateway/libs/helper/logger"
 	"github.com/uzzeet/uzzeet-gateway/service"
@@ -44,8 +45,13 @@ func (fwd chiForwarder) forward(w http.ResponseWriter, r *http.Request) {
 				fwd.notFound(composite.Key, w, r)
 				return
 			}
+			tr := &http.Transport{
+				MaxIdleConns:       100,
+				IdleConnTimeout:    30 * time.Second,
+				DisableCompression: true,
+			}
 
-			client := &http.Client{}
+			client := &http.Client{Transport: tr}
 			httpReq.Header = r.Header
 
 			resp, err := client.Do(httpReq)
@@ -63,6 +69,7 @@ func (fwd chiForwarder) forward(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			defer resp.Body.Close()
 			body, err := ioutil.ReadAll(resp.Body)
 			if err != nil {
 				log.Fatalln(err)
@@ -78,7 +85,6 @@ func (fwd chiForwarder) forward(w http.ResponseWriter, r *http.Request) {
 			}
 
 			fwd.responseFromHttp(composite.Key, w, body)
-			defer resp.Body.Close()
 
 			return
 		}
