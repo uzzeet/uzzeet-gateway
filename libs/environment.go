@@ -56,6 +56,18 @@ const (
 	CKConnMaxIdle  = "CK_CONN_MAX_IDLE"
 	CKConnMaxOpen  = "CK_CONN_MAX_OPEN"
 
+	QSEngine       = "CK_ENGINE"
+	QSHost         = "CK_HOST"
+	QSPort         = "CK_PORT"
+	QSUser         = "CK_USER"
+	QSPwd          = "CK_PWD"
+	QSName         = "CK_NAME"
+	QSSSLMode      = "CK_SSL_MODE"
+	QSConnStr      = "CK_CONN_STR"
+	QSConnLifetime = "CK_CONN_LIFETIME"
+	QSConnMaxIdle  = "CK_CONN_MAX_IDLE"
+	QSConnMaxOpen  = "CK_CONN_MAX_OPEN"
+
 	BrokerAddr = "BROKER_ADDR"
 	BrokerPwd  = "BROKER_PWD"
 
