@@ -90,7 +90,7 @@ func init() {
 	fwd = handler.NewChiForwarder(authService, strictAuthService, privateAuthService, mux.Route(helper.Env(libs.AppEndpoint, "/"), nil))
 	httpServer = http.Server{
 		Addr:         fmt.Sprintf(":%s", helper.Env(libs.AppPort, "9000")),
-		ReadTimeout:  30 * time.Second,
+		ReadTimeout:  60 * time.Second,
 		WriteTimeout: 60 * time.Second,
 		Handler:      mux,
 	}
