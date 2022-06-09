@@ -5,7 +5,9 @@ import (
 	"github.com/uzzeet/uzzeet-gateway/libs"
 	"github.com/uzzeet/uzzeet-gateway/libs/helper"
 	"github.com/uzzeet/uzzeet-gateway/libs/helper/serror"
+	"os"
 	"strings"
+	"syscall"
 )
 
 var interceptor LogInterceptor = DefaultInterceptor()
@@ -60,10 +62,8 @@ func isLocal() bool {
 }
 
 func exit() {
-	/*err := syscall.Kill(syscall.Getpid(), syscall.SIGINT)
-	if err != nil {
-		os.Exit(1)
-	}*/
+	p, _ := os.FindProcess(os.Getpid())
+	_ = p.Signal(syscall.SIGTERM)
 }
 
 func castToSError(obj interface{}, skip int) serror.SError {

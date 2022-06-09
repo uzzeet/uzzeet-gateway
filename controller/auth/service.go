@@ -41,6 +41,7 @@ func (svc authService) Authorize(request models.Request) (*models.AuthorizationI
 		organization_id string
 		app_id          string
 		exp             int
+		user_access     []interface{}
 	)
 
 	token, err := svc.parseToken(request.Token)
@@ -69,6 +70,7 @@ func (svc authService) Authorize(request models.Request) (*models.AuthorizationI
 			isActive = claims.IsActive
 			organization_id = claims.OrganizationId
 			app_id = claims.AppId
+			user_access = claims.UserAccess
 
 		case "private":
 			if helper.MD5(fmt.Sprintf("private:[%s:%s:%s:%s:%s]", claims.UserID, claims.Username, claims.IsOrgAdmin, claims.IsActive, claims.OrganizationId, claims.AppId)) != claims.Id {
@@ -81,6 +83,7 @@ func (svc authService) Authorize(request models.Request) (*models.AuthorizationI
 			isActive = claims.IsActive
 			organization_id = claims.OrganizationId
 			app_id = claims.AppId
+			user_access = claims.UserAccess
 		}
 
 		if svc.useSignature {
@@ -118,6 +121,7 @@ func (svc authService) Authorize(request models.Request) (*models.AuthorizationI
 		OrganizationId: organization_id,
 		AppId:          app_id,
 		Exp:            exp,
+		UserAccess:     user_access,
 	}, nil
 }
 
@@ -183,6 +187,7 @@ func (svc authService) claimToken(tokenString string) (*models.TokenClaims, erro
 			OrganizationId: "0",
 			AppId:          "0",
 			Exp:            0,
+			UserAccess:     nil,
 		}, nil
 	}
 

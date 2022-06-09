@@ -6,6 +6,7 @@ import (
 	"github.com/uzzeet/uzzeet-gateway/libs/helper"
 	"os"
 	"strings"
+	"syscall"
 	//"syscall"
 )
 
@@ -18,10 +19,8 @@ func printErr(m string) {
 }
 
 func exit() {
-	/*err := syscall.Kill(syscall.Getpid(), syscall.SIGINT)
-	if err != nil {
-		os.Exit(1)
-	}*/
+	p, _ := os.FindProcess(os.Getpid())
+	_ = p.Signal(syscall.SIGTERM)
 }
 
 func getPath(val string) string {
