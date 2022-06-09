@@ -47,7 +47,7 @@ func (fwd chiForwarder) forward(w http.ResponseWriter, r *http.Request) {
 			}
 			tr := &http.Transport{
 				MaxIdleConns:       100,
-				IdleConnTimeout:    60 * time.Second,
+				IdleConnTimeout:    30 * time.Second,
 				DisableCompression: true,
 			}
 

@@ -2,9 +2,9 @@ package controller
 
 import (
 	"fmt"
-	"github.com/uzzeet/uzzeet-gateway/controller/resolver"
-
 	redis "github.com/go-redis/redis/v7"
+	"github.com/uzzeet/uzzeet-gateway/controller/resolver"
+	"github.com/uzzeet/uzzeet-gateway/libs"
 	"go.elastic.co/apm/module/apmgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/balancer/roundrobin"
@@ -44,8 +44,7 @@ func InitRegistry(cfg RegistryConfig) (*Registry, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	reg := redisreg.NewRegistry(DefaultRegistryKey, redisConn)
+	reg := redisreg.NewRegistry(helper.Env(libs.AppKeyGateway, DefaultRegistryKey), redisConn)
 
 	resolv, errx := service.NewResolver()
 	if errx != nil {

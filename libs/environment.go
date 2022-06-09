@@ -19,6 +19,7 @@ const (
 const (
 	AppEnv          = "APP_ENV"
 	AppKey          = "APP_KEY"
+	AppKeyGateway   = "APP_KEY_GATEWAY"
 	AppName         = "APP_NAME"
 	AppVersion      = "APP_VERSION"
 	AppHost         = "APP_HOST"
