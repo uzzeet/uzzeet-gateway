@@ -34,14 +34,19 @@ func NewService(method, signingKey string, compositeRepo repo.CompositeRepositor
 
 func (svc authService) Authorize(request models.Request) (*models.AuthorizationInfo, error) {
 	var (
-		userID          string
-		username        string
-		isOrgAdmin      int
-		isActive        int
-		organization_id string
-		app_id          string
-		exp             int
-		user_access     []interface{}
+		userID         string
+		username       string
+		userFullname   string
+		email          string
+		roleID         string
+		memberID       string
+		dealerID       interface{}
+		iDOrganization interface{}
+		groupID        []models.GroupID
+		phone          string
+		epooolToken    string
+		iat            int
+		exp            int
 	)
 
 	token, err := svc.parseToken(request.Token)
@@ -66,24 +71,38 @@ func (svc authService) Authorize(request models.Request) (*models.AuthorizationI
 		switch svc.method {
 		case "strict":
 			userID = claims.UserID
-			isOrgAdmin = claims.IsOrgAdmin
-			isActive = claims.IsActive
-			organization_id = claims.OrganizationId
-			app_id = claims.AppId
-			user_access = claims.UserAccess
+			username = claims.Username
+			userFullname = claims.UserFullname
+			email = claims.Email
+			roleID = claims.RoleID
+			memberID = claims.MemberID
+			dealerID = claims.DealerID
+			iDOrganization = claims.IDOrganization
+			groupID = claims.GroupID
+			phone = claims.Phone
+			epooolToken = claims.EpooolToken
+			iat = claims.Iat
+			exp = claims.Exp
 
 		case "private":
-			if helper.MD5(fmt.Sprintf("private:[%s:%s:%s:%s:%s]", claims.UserID, claims.Username, claims.IsOrgAdmin, claims.IsActive, claims.OrganizationId, claims.AppId)) != claims.Id {
+			if helper.MD5(fmt.Sprintf("private:[%s:%s:%s:%s:%s]", claims.UserID, claims.Username, "", "", "", "")) != claims.Id {
 				return nil, fmt.Errorf("invalid authorization token, 0x10001")
 			}
 
 		case "protect":
 			userID = claims.UserID
-			isOrgAdmin = claims.IsOrgAdmin
-			isActive = claims.IsActive
-			organization_id = claims.OrganizationId
-			app_id = claims.AppId
-			user_access = claims.UserAccess
+			username = claims.Username
+			userFullname = claims.UserFullname
+			email = claims.Email
+			roleID = claims.RoleID
+			memberID = claims.MemberID
+			dealerID = claims.DealerID
+			iDOrganization = claims.IDOrganization
+			groupID = claims.GroupID
+			phone = claims.Phone
+			epooolToken = claims.EpooolToken
+			iat = claims.Iat
+			exp = claims.Exp
 		}
 
 		if svc.useSignature {
@@ -116,12 +135,17 @@ func (svc authService) Authorize(request models.Request) (*models.AuthorizationI
 	return &models.AuthorizationInfo{
 		UserID:         userID,
 		Username:       username,
-		IsOrgAdmin:     isOrgAdmin,
-		IsActive:       isActive,
-		OrganizationId: organization_id,
-		AppId:          app_id,
+		UserFullname:   userFullname,
+		Email:          email,
+		RoleID:         roleID,
+		MemberID:       memberID,
+		DealerID:       dealerID,
+		IDOrganization: iDOrganization,
+		GroupID:        groupID,
+		Phone:          phone,
+		EpooolToken:    epooolToken,
+		Iat:            iat,
 		Exp:            exp,
-		UserAccess:     user_access,
 	}, nil
 }
 
@@ -182,12 +206,17 @@ func (svc authService) claimToken(tokenString string) (*models.TokenClaims, erro
 		return &models.TokenClaims{
 			UserID:         "1",
 			Username:       fmt.Sprintf("admin+%s@cleva.com", uttime.ToString("Ymd", time.Now())),
-			IsOrgAdmin:     0,
-			IsActive:       0,
-			OrganizationId: "0",
-			AppId:          "0",
+			UserFullname:   "",
+			Email:          "",
+			RoleID:         "",
+			MemberID:       "",
+			DealerID:       nil,
+			IDOrganization: nil,
+			GroupID:        nil,
+			Phone:          "",
+			EpooolToken:    "",
+			Iat:            0,
 			Exp:            0,
-			UserAccess:     nil,
 		}, nil
 	}
 

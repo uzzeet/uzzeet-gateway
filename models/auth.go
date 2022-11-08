@@ -30,6 +30,28 @@ type Composite struct {
 
 type TokenClaims struct {
 	jwt.StandardClaims
+	UserID         string      `json:"user_id"`
+	Username       string      `json:"username"`
+	UserFullname   string      `json:"user_fullname"`
+	Email          string      `json:"email"`
+	RoleID         string      `json:"role_id"`
+	MemberID       string      `json:"member_id"`
+	DealerID       interface{} `json:"dealer_id"`
+	IDOrganization interface{} `json:"id_organization"`
+	GroupID        []GroupID   `json:"group_id"`
+	Phone          string      `json:"phone"`
+	EpooolToken    string      `json:"epoool_token"`
+	Iat            int         `json:"iat"`
+	Exp            int         `json:"exp"`
+	SoleType       string      `json:"role_type"`
+}
+
+type GroupID struct {
+	GroupID string `json:"group_id"`
+}
+
+/*type TokenClaims struct {
+	jwt.StandardClaims
 	UserID         string        `json:"id"`
 	Username       string        `json:"username"`
 	IsOrgAdmin     int           `json:"isorgadmin"`
@@ -38,7 +60,7 @@ type TokenClaims struct {
 	AppId          string        `json:"app"`
 	Exp            int           `json:"exp"`
 	UserAccess     []interface{} `json:"user_access"`
-}
+}*/
 
 type Token struct {
 	Type  string
