@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi"
@@ -81,8 +82,10 @@ func init() {
 	mux.Use(middleware.DefaultCompress)
 	mux.Use(middleware.Timeout(3 * time.Minute))
 	mux.Use(apmchi.Middleware())
+	tmpWhitelist := os.Getenv("URL-LIST")
+	tmpWhitelistArray := strings.Split(tmpWhitelist, ",")
 	mux.Use(cors.New(cors.Options{
-		AllowedOrigins: []string{"https://*", "http://*"},
+		AllowedOrigins: tmpWhitelistArray,
 		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Accept-Encoding", "Cookie", "Origin", "X-Api-Key"},
 	}).Handler)
