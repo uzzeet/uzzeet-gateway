@@ -1,6 +1,7 @@
 package handler
 
 import (
+	redisreg "github.com/uzzeet/uzzeet-gateway/controller/redis"
 	"sync"
 
 	"github.com/go-chi/chi"
@@ -17,10 +18,11 @@ type chiForwarder struct {
 	strictAuthService  auth.Service
 	privateAuthService auth.Service
 	composite          map[string]*service.Composite
+	rd                 *redisreg.Connection
 }
 
-func NewChiForwarder(authService, strictAuthService, privateAuthService auth.Service, r chi.Router) service.Forwarder {
-	handler := &chiForwarder{&sync.Mutex{}, authService, strictAuthService, privateAuthService, make(map[string]*service.Composite)}
+func NewChiForwarder(authService, strictAuthService, privateAuthService auth.Service, r chi.Router, rd *redisreg.Connection) service.Forwarder {
+	handler := &chiForwarder{&sync.Mutex{}, authService, strictAuthService, privateAuthService, make(map[string]*service.Composite), rd}
 
 	r.Use(handler.agentIdentification)
 	r.Get("/", handler.hello)

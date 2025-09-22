@@ -32,6 +32,8 @@ const (
 	AppTimezone     = "APP_TIMEZONE"
 	AppNamespace    = "APP_NAMESPACE"
 	AppCluster      = "APP_CLUSTER"
+	RedisTokenAddr  = "REDIS_TOKEN"
+	RedisTokenPwd   = "REDIS_TOKEN_PWD"
 
 	DBEngine       = "DB_ENGINE"
 	DBHost         = "DB_HOST"

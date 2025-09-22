@@ -90,7 +90,16 @@ func init() {
 		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token", "Accept-Encoding", "Cookie", "Origin", "X-Api-Key"},
 	}).Handler)
 
-	fwd = handler.NewChiForwarder(authService, strictAuthService, privateAuthService, mux.Route(helper.Env(libs.AppEndpoint, "/"), nil))
+	redisConn, err := redisreg.NewConnection(&redis.Options{
+		Addr:     helper.Env(libs.RedisTokenAddr, "127.0.0.1:6379"),
+		Password: helper.Env(libs.RedisTokenPwd, ""),
+	})
+	if err != nil {
+		logger.Err(err)
+		os.Exit(1)
+	}
+
+	fwd = handler.NewChiForwarder(authService, strictAuthService, privateAuthService, mux.Route(helper.Env(libs.AppEndpoint, "/"), nil), redisConn)
 	httpServer = http.Server{
 		Addr:         fmt.Sprintf(":%s", helper.Env(libs.AppPort, "9000")),
 		ReadTimeout:  60 * time.Second,

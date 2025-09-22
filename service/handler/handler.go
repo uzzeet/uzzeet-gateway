@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/uzzeet/uzzeet-gateway/models"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -13,6 +14,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/runnerktb/libs/token"
 	L "github.com/uzzeet/uzzeet-gateway/libs/helper/logger"
 	"github.com/uzzeet/uzzeet-gateway/service"
 )
@@ -49,6 +51,29 @@ func (fwd chiForwarder) forward(w http.ResponseWriter, r *http.Request) {
 				MaxIdleConns:       100,
 				IdleConnTimeout:    30 * time.Second,
 				DisableCompression: true,
+			}
+			tmpToken := r.Header.Get("Authorization")
+			if tmpToken != "" && path != "/user/logout_user" {
+				tok, _ := token.ClaimToken([]string{tmpToken})
+				expToken := time.Unix(int64(tok.Exp), 0)
+				expTime := time.Until(expToken)
+				expVal := 15 * 24 * time.Hour
+				if expTime < expVal {
+					_, err := fwd.rd.Get(fmt.Sprintf("token-%s:%d", tok.Username, tok.Exp)).Result()
+					if err != nil {
+						w.Header().Set(models.ContentTypeHeaderKey, models.ContentTypeValueJSON)
+						w.WriteHeader(http.StatusForbidden)
+						logger(json.NewEncoder(w).Encode(models.Response{
+							Response:   http.StatusForbidden,
+							Error:      "Token tidak valid",
+							Controller: baseHttp,
+							Action:     r.Method,
+							Result:     "",
+						}))
+
+						return
+					}
+				}
 			}
 
 			client := &http.Client{Transport: tr}
